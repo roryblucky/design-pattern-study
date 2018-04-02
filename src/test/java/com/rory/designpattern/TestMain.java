@@ -1,16 +1,30 @@
 package com.rory.designpattern;
 
-import com.rory.designpattern.adaptor.*;
+import com.rory.designpattern.adaptor.PowerSocket110VAdaptor;
+import com.rory.designpattern.adaptor.PowerSocket220V;
+import com.rory.designpattern.adaptor.PowerSocket220VImpl;
+import com.rory.designpattern.builder.ComputerBuilder;
+import com.rory.designpattern.builder.Director;
+import com.rory.designpattern.builder.IComputerBuilder;
+import com.rory.designpattern.decorator.BeefDecorator;
+import com.rory.designpattern.decorator.Foods;
+import com.rory.designpattern.decorator.Noodle;
+import com.rory.designpattern.decorator.SaltDecorator;
+import com.rory.designpattern.facade.Computer;
 import com.rory.designpattern.factory.abstracFactory.CarFactoryA;
 import com.rory.designpattern.factory.abstracFactory.CarFactoryB;
 import com.rory.designpattern.factory.normalFactory.BMWFactory;
 import com.rory.designpattern.factory.simpleFactory.AudiCar;
 import com.rory.designpattern.factory.simpleFactory.BMWCar;
 import com.rory.designpattern.factory.simpleFactory.CarSimpleFactory;
-import com.rory.designpattern.observer.custom.CustomHouse;
-import com.rory.designpattern.observer.custom.CustomPerson;
-import com.rory.designpattern.observer.usejdk.House;
-import com.rory.designpattern.observer.usejdk.Person;
+import com.rory.designpattern.observer.custom.ISubject;
+import com.rory.designpattern.observer.custom.Observer1;
+import com.rory.designpattern.observer.custom.Observer2;
+import com.rory.designpattern.observer.custom.SubjectImpl;
+import com.rory.designpattern.observer.event.AddEvent;
+import com.rory.designpattern.observer.event.AddEventListener;
+import com.rory.designpattern.observer.event.DelEventListener;
+import com.rory.designpattern.observer.event.EventPublisher;
 import com.rory.designpattern.proxy.ICoder;
 import com.rory.designpattern.proxy.dynamicProxy.DynamicProxyFactory;
 import com.rory.designpattern.proxy.staticProxy.StaticProxyFactory;
@@ -96,23 +110,56 @@ public class TestMain {
     @Test
     public void testObserve() {
         //jdk方式
-        House house = new House();
-        Person p1 = new Person("1");
-        Person p2= new Person("2");
-        Person p3 = new Person("3");
-        house.addObserver(p1);
-        house.addObserver(p2);
-        house.addObserver(p3);
-        house.setPrice(1111);
+//        House house = new House();
+//        Person p1 = new Person("1");
+//        Person p2= new Person("2");
+//        Person p3 = new Person("3");
+//        house.addObserver(p1);
+//        house.addObserver(p2);
+//        house.addObserver(p3);
+//        house.setPrice(1111);
 
         //custom observe
-        CustomHouse house1 = new CustomHouse();
-        CustomPerson person1 = new CustomPerson("1");
-        CustomPerson person2 = new CustomPerson("2");
-        CustomPerson person3 = new CustomPerson("3");
-        house1.addObserver(person1);
-        house1.addObserver(person2);
-        house1.addObserver(person3);
-        house1.setPrice(2222);
+        ISubject subject = new SubjectImpl();
+        subject.addObserver(new Observer1());
+        subject.addObserver(new Observer2());
+        subject.notifyAllObservers();
+    }
+
+    @Test
+    public void testFacade() {
+        Computer computer = new Computer();//Facade
+        computer.start();
+    }
+
+    @Test
+    public void testDecorator() {
+        Foods foods = new Noodle();
+        BeefDecorator beefDecorator = new BeefDecorator("beef", foods);
+        SaltDecorator saltDecorator = new SaltDecorator("salt", beefDecorator);
+        saltDecorator.cook();
+    }
+
+    @Test
+    public void testBuilder() {
+        //I need a new computer. I ask the Director to help me to build a computer
+        Director director = new Director();
+        //The director need call a builder to build a computer
+        IComputerBuilder builder = new ComputerBuilder();
+        //build a computer for me.
+        com.rory.designpattern.builder.Computer computer = director.constructComputer(builder);
+        //I'll check the computer configuration
+        computer.showConfig();
+    }
+
+    @Test
+    public void testEvent() {
+        EventPublisher publisher = new EventPublisher();
+        AddEventListener addEventListener = new AddEventListener();
+        DelEventListener delEventListener = new DelEventListener();
+        publisher.addListener(addEventListener);
+        publisher.addListener(delEventListener);
+
+        publisher.publishEvent(new AddEvent());
     }
 }
