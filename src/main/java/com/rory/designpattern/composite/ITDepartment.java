@@ -1,8 +1,8 @@
 package com.rory.designpattern.composite;
 
-public class HRDepartment extends Company {
+public class ITDepartment extends Company {
 
-    public HRDepartment(String name) {
+    public ITDepartment(String name) {
         super(name);
     }
 

@@ -3,9 +3,17 @@ package com.rory.designpattern;
 import com.rory.designpattern.adaptor.PowerSocket110VAdaptor;
 import com.rory.designpattern.adaptor.PowerSocket220V;
 import com.rory.designpattern.adaptor.PowerSocket220VImpl;
+import com.rory.designpattern.bridge.CommonMessage;
+import com.rory.designpattern.bridge.EmailSender;
+import com.rory.designpattern.bridge.SmsSender;
+import com.rory.designpattern.bridge.UrgencyMessage;
 import com.rory.designpattern.builder.ComputerBuilder;
 import com.rory.designpattern.builder.Director;
 import com.rory.designpattern.builder.IComputerBuilder;
+import com.rory.designpattern.composite.Company;
+import com.rory.designpattern.composite.HNACompany;
+import com.rory.designpattern.composite.HRDepartment;
+import com.rory.designpattern.composite.ITDepartment;
 import com.rory.designpattern.decorator.BeefDecorator;
 import com.rory.designpattern.decorator.Foods;
 import com.rory.designpattern.decorator.Noodle;
@@ -176,6 +184,28 @@ public class TestMain {
         System.out.println(emp);
         emp.recovery(snapshot);
         System.out.println(emp);
+
+    }
+
+    @Test
+    public void testComposite() {
+        Company company = new HNACompany("HNA");
+        ITDepartment itDepartment = new ITDepartment("IT");
+        HRDepartment hrDepartment = new HRDepartment("HR");
+        company.add(itDepartment);
+        company.add(hrDepartment);
+        company.disPlay(1);
+    }
+
+    @Test
+    public void testBridge() {
+        CommonMessage commonMessage = new CommonMessage("msg", "Rory");
+        SmsSender smsSender = new SmsSender(commonMessage);
+        smsSender.send();
+
+        UrgencyMessage urgencyMessage = new UrgencyMessage("msg1", "Lu");
+        EmailSender emailSender = new EmailSender(urgencyMessage);
+        emailSender.send();
 
     }
 }

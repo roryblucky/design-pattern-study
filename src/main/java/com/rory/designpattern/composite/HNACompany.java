@@ -3,34 +3,28 @@ package com.rory.designpattern.composite;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HNACompany extends ICompany {
+public class HNACompany extends Company {
 
-    private String name;
-
-    private List<ICompany> departmenets = new ArrayList<>();
+    private List<Company> departmenets = new ArrayList<>();
 
     public HNACompany(String name) {
-        this.name = name;
+        super(name);
     }
 
 
     @Override
-    public void add(ICompany department) {
+    public void add(Company department) {
         departmenets.add(department);
     }
 
     @Override
-    public void remove(ICompany department) {
+    public void remove(Company department) {
         department.remove(department);
     }
 
     @Override
     public void disPlay(int depth) {
-        StringBuilder builder = new StringBuilder("-");
-        for(int i = 0; i <= depth; i++) {
-            builder.append("-");
-        }
-        System.out.println(builder.append(name).toString());
+        System.out.println(getPrefix(depth) + name);
         departmenets.forEach(d -> {
             d.disPlay(depth + 2);
         });
