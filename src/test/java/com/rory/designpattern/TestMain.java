@@ -17,6 +17,8 @@ import com.rory.designpattern.factory.normalFactory.BMWFactory;
 import com.rory.designpattern.factory.simpleFactory.AudiCar;
 import com.rory.designpattern.factory.simpleFactory.BMWCar;
 import com.rory.designpattern.factory.simpleFactory.CarSimpleFactory;
+import com.rory.designpattern.memento.Emp;
+import com.rory.designpattern.memento.EmpSnapshot;
 import com.rory.designpattern.observer.custom.ISubject;
 import com.rory.designpattern.observer.custom.Observer1;
 import com.rory.designpattern.observer.custom.Observer2;
@@ -161,5 +163,19 @@ public class TestMain {
         publisher.addListener(delEventListener);
 
         publisher.publishEvent(new AddEvent());
+    }
+
+    @Test
+    public void testMemento() {
+        Emp emp = new Emp();
+        emp.setName("Rory");
+        emp.setMoney("100W");
+        EmpSnapshot snapshot = emp.createSnapShot();
+        System.out.println(emp);
+        emp.setMoney("10W");
+        System.out.println(emp);
+        emp.recovery(snapshot);
+        System.out.println(emp);
+
     }
 }

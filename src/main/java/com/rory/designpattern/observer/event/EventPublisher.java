@@ -17,13 +17,13 @@ public class EventPublisher {
         if (event instanceof Event) {
             customEvent = (Event) event;
         }
-        invoke(event, customEvent);
+        invoke(customEvent);
     }
 
-    private void invoke(Object event, Event customEvent) {
+    private void invoke(Event event) {
         eventListeners.forEach(eventListener -> {
             if (event.getClass().equals(retrieveEvent(eventListener))) {
-                eventListener.onEvent(customEvent);
+                eventListener.onEvent(event);
             }
         });
     }
