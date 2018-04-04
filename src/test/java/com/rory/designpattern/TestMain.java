@@ -50,6 +50,7 @@ import com.rory.designpattern.strategy.NormalStrategy;
 import com.rory.designpattern.strategy.SimpleStrategy;
 import com.rory.designpattern.strategy.StrategyProvider;
 import com.rory.designpattern.template.ChineseSpeaker;
+import com.rory.designpattern.visitor.*;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -238,5 +239,27 @@ public class TestMain {
         projectLeader.setManager(teamLeader).setManager(boss);
 
         projectLeader.askForLeave(10);
+    }
+
+    /**
+     * 同一个药方，可以在药方拿药，也可以在医院拿药。
+     * 数据结构没变，但可以被多个对象访问
+     */
+    @Test
+    public void testVisitor() {
+        //构造处方
+        Prescription prescription = new Prescription();
+        prescription.addMedicine(new MedicineA("阿莫西林", 23.00));
+        prescription.addMedicine(new MedicineB("抗病毒冲剂", 20.00));
+
+        Visitor hospitalVisitor = new HospitalVisitor("医院");
+        Visitor pharmacyVisitor = new PharmacyVisitor("药房");
+
+        //医院拿药
+        hospitalVisitor.buyMedicines(prescription);
+
+        //药房拿药
+        pharmacyVisitor.buyMedicines(prescription);
+
     }
 }
