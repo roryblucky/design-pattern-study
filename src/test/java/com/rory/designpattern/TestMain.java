@@ -10,6 +10,10 @@ import com.rory.designpattern.bridge.UrgencyMessage;
 import com.rory.designpattern.builder.ComputerBuilder;
 import com.rory.designpattern.builder.Director;
 import com.rory.designpattern.builder.IComputerBuilder;
+import com.rory.designpattern.command.Cooker;
+import com.rory.designpattern.command.NoodleCommand;
+import com.rory.designpattern.command.RiceCommand;
+import com.rory.designpattern.command.Waiter;
 import com.rory.designpattern.composite.Company;
 import com.rory.designpattern.composite.HNACompany;
 import com.rory.designpattern.composite.HRDepartment;
@@ -38,6 +42,9 @@ import com.rory.designpattern.observer.event.EventPublisher;
 import com.rory.designpattern.proxy.ICoder;
 import com.rory.designpattern.proxy.dynamicProxy.DynamicProxyFactory;
 import com.rory.designpattern.proxy.staticProxy.StaticProxyFactory;
+import com.rory.designpattern.reponsechain.Boss;
+import com.rory.designpattern.reponsechain.ProjectLeader;
+import com.rory.designpattern.reponsechain.TeamLeader;
 import com.rory.designpattern.singleton.Singleton;
 import com.rory.designpattern.strategy.NormalStrategy;
 import com.rory.designpattern.strategy.SimpleStrategy;
@@ -207,5 +214,29 @@ public class TestMain {
         EmailSender emailSender = new EmailSender(urgencyMessage);
         emailSender.send();
 
+    }
+
+    @Test
+    public void testCommand() {
+        Waiter waiter = new Waiter();
+        Cooker cooker = new Cooker();
+        NoodleCommand noodleCommand = new NoodleCommand(cooker);
+        RiceCommand riceCommand = new RiceCommand(cooker);
+
+        waiter.addCommand(noodleCommand);
+        waiter.addCommand(riceCommand);
+
+        waiter.placeOrder();
+    }
+
+    @Test
+    public void testResponseChain() {
+        ProjectLeader projectLeader = new ProjectLeader();
+        TeamLeader teamLeader = new TeamLeader();
+        Boss boss = new Boss();
+
+        projectLeader.setManager(teamLeader).setManager(boss);
+
+        projectLeader.askForLeave(10);
     }
 }
